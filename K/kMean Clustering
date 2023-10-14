@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Load the dataset
+data = pd.read_csv("Mall_Customers.csv")
+
+# Preprocess the data if necessary (e.g., encoding 'Gender', scaling features)
+
+# Initialize a list to store SSE values for different K
+sse = []
+
+# Define the range of K values to test (from 1 to 15)
+k_range = range(1, 16)
+
+# Perform K-Means clustering for each K
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=0)
+    kmeans.fit(data[['Age', 'Annual Income (k$)', 'Spending Score (1-100)']])
+    sse.append(kmeans.inertia_)  # Sum of squared distances to the nearest cluster center
+
+# Plot the SSE values for different K
+plt.figure(figsize=(8, 6))
+plt.plot(k_range, sse, marker='o', linestyle='-')
+plt.title('Elbow Method for Optimal K')
+plt.xlabel('Number of Clusters (K)')
+plt.ylabel('Sum of Squared Errors (SSE)')
+plt.grid(True)
+plt.show()
