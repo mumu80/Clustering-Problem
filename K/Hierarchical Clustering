@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.preprocessing import StandardScaler
+
+# Load the dataset
+data = pd.read_csv("Mall_Customers.csv")
+
+# Preprocess the data (e.g., scaling features)
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(data[['Age', 'Annual Income (k$)', 'Spending Score (1-100)']])
+
+# Perform hierarchical clustering
+# You can choose the number of clusters or a distance threshold as appropriate
+n_clusters = 3  # You can choose the appropriate number of clusters
+agg_clustering = AgglomerativeClustering(n_clusters=n_clusters)
+clusters = agg_clustering.fit_predict(scaled_data)
+
+# Plot the dendrogram
+linkage_matrix = linkage(scaled_data, method='ward')  # You can choose different linkage methods
+plt.figure(figsize=(10, 6))
+dendrogram(linkage_matrix)
+plt.title('Dendrogram for Hierarchical Clustering')
+plt.xlabel('Samples')
+plt.ylabel('Distance')
+plt.show()
+# Add the cluster labels to the original dataset
+data['Cluster'] = clusters
